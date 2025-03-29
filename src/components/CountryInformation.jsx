@@ -1,13 +1,21 @@
 // CountryInformation.js
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './CountryInformation.css';
 import CountryInfo from './CountryInfo';
 
 function CountryInformation() {
-    const [countryName, setCountryName] = useState('');
-    const [countryData, setCountryData] = useState(null);
+    const [countryName, setCountryName] = useState(localStorage.getItem('countryName') || '');    //Stores the input field value(country name typed by the user). Initially set to '' (empty).Updates when the user types.
+    const [countryData, setCountryData] = useState(null);  
     const [error, setError] = useState('');
+
+     // Load stored country data when the component mounts
+    useEffect(() => {
+        const savedData = localStorage.getItem('countryData');
+        if (savedData) {
+            setCountryData(JSON.parse(savedData)); // Convert JSON string back to an object
+        }
+    }, []);
 
     const handleSearch = () => {
         if (!countryName) {
@@ -29,6 +37,10 @@ function CountryInformation() {
                 } else {
                     setError('');
                     setCountryData(data[0]);
+
+                    //  Save to localStorage
+                    localStorage.setItem('countryName', countryName);
+                    localStorage.setItem('countryData', JSON.stringify(data[0])); // Convert object to JSON
                 }
             })
             .catch(() => {
