@@ -48,6 +48,7 @@ function CountryInformation() {
                         placeholder="Enter a country name here..."
                         value={countryName}
                         onChange={(e) => setCountryName(e.target.value)}
+                        onKeyDown={(e) => e.key === 'Enter' && handleSearch()} // Trigger search on Enter key
                     />
                     <button id="search-btn" onClick={handleSearch}>
                         Search
